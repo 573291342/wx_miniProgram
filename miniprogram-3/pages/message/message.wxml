@@ -1,0 +1,7 @@
+<!--pages/message/message.wxml-->
+
+<navigator url="/pages/contact/contact" open-type="switchTab">点击跳转到联系我们</navigator>
+<button bindtap="gotoMessage">编程式导航跳转到联系我们</button>
+
+<view>count:{{count}}</view>
+<button bindtap="addCount">点击count+1</button>

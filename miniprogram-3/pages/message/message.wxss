@@ -1,0 +1,9 @@
+/* pages/message/message.wxss */
+
+navigator {
+  background-color: rgb(186, 211, 221);
+  margin: 20rpx auto;
+  text-align: center;
+  border-radius: 20rpx;
+  color: rgb(8, 163, 55);
+}

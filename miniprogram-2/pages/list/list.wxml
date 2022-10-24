@@ -1,0 +1,12 @@
+<!--pages/list/list.wxml-->
+<view>随机数为{{ran}}</view>
+<input bindinput="inputHandler" type="text" value="{{info}}"/>
+<button type="primary" bindtap="btnTapHandler">按钮</button>
+
+<view wx:if="{{flag===1}}">根据情况展示</view>
+
+<view wx:if="{{flag===1}}" wx:for="{{arr}}" wx:for-item="p" wx:key="id">
+  索引是：{{index}}-id为：{{p.id}}-值为:{{p.value}}
+</view>
+
+<navigator url="/pages/test/test" open-type="switchTab">导航到test页面</navigator>

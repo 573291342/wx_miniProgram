@@ -1,0 +1,12 @@
+/* pages/list/list.wxss */
+
+input {
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+  margin: 10px 10px;
+  padding: 0 10px;
+}
+
+view {
+  background-color: lightpink;
+}
