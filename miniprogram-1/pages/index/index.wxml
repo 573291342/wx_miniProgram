@@ -8,4 +8,18 @@
 
 <button type="primary" bindtap="btnTap2" data-info="{{2}}">+2</button>
 
-<input bindinput="inputHandler" type="text" value="{{msg}}"/>
+<input bindinput="inputHandler" type="text" value="{{msg}}" />
+
+<view wx:if="{{type === 1}}">男</view>
+<view wx:elif="{{type === 2}}">女</view>
+<view wx:else>保密</view>
+
+<view hidden="{{flag}}">条件为 true 隐藏，条件为 false 显示</view>
+
+<view class=".username" wx:for="{{arr1}}" wx:key="id">
+  索引是：{{item.id}},item项是：{{item.name}}
+</view>
+
+<!-- <view wx:for="{{arr1}}" wx:key="id" wx:for-index="ids" wx:for-item="itemName">
+  索引是：{{ids}},item项是：{{itemName}}
+</view> -->

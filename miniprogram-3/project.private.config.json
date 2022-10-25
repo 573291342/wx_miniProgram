@@ -10,7 +10,7 @@
       "list": [
         {
           "name": "联系我们页面开发",
-          "pathName": "pages/contact/contact",
+          "pathName": "pages/home/home",
           "query": "",
           "launchMode": "default",
           "scene": null

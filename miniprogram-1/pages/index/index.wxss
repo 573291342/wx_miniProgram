@@ -1,7 +1,12 @@
 /**index.wxss**/
+@import "/common/common.wxss";
 input {
   border: 1px solid #ccc;
-  margin: 5px;
-  padding: 5px;
-  border-radius: 3px;
+  margin: 10rpx;
+  padding: 10rpx;
+  border-radius: 6rpx;
+}
+
+view {
+  background-color: lightpink;
 }

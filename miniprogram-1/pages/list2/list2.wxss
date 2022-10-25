@@ -18,3 +18,7 @@
 .swiper-container .item:nth-child(3) {
   background-color: lightpink;
 }
+
+view {
+  color: white;
+}

@@ -8,3 +8,13 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 } 
+
+view {
+  padding: 10rpx;
+  margin: 10rpx;
+  background-color: lightskyblue;
+}
+
+view:nth-child(1){
+  background-color: lightskyblue;
+}

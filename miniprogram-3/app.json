@@ -1,9 +1,9 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/index/index",
     "pages/message/message",
     "pages/contact/contact",
-    "pages/index/index",
     "pages/logs/logs"
   ],
   "window": {
