@@ -27,6 +27,9 @@
 <button size="mini" type="primary">主色调按钮</button>
 <button size="mini" type="warn">警告按钮</button>
 <!-- plain镂空按钮 -->
+<button plain>普通按钮</button>
 <button plain type="default">绿色字体按钮</button>
 <button plain type="primary">主色调按钮</button>
 <button plain type="warn">警告按钮</button>
+
+<image src=""></image>
