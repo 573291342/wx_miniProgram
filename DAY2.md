@@ -1,4 +1,4 @@
-# 模板语法
+# WXML模板语法
 
 ## 数据绑定
 
@@ -199,4 +199,238 @@
       <input bindinput="inputHandler" type="text" value="{{msg}}"/>
       ```
 
-      
+## 条件渲染
+
+1. ### wx:if(相当于v-if)
+
+   在小程序中，使用`wx:if="{{condition}}"`来判断是否需要渲染该代码块：
+
+   ```html
+   <view wx:if="{{condition}}"></view>
+   ```
+
+   也可以用`wx:elif`和`wx:else`来添加else判断：
+
+   ```html
+   <view wx:if="{{type === 1}}"></view>
+   <view wx:elif="{{type === 2}}"></view>
+   <view wx:else>保密</view>
+   ```
+
+2. ### 结合\<block\>使用wx:if
+
+   如果一次性控制多个组件的展示和隐藏，可以使用一个`<block></block>`标签将多个组件包装起来，并在`<block>`标签上使用`wx:if`控制属性。**(相当于Vue中的template)**
+
+3. ### hidden(相当于v-show)
+
+   在小程序中，直接使用`hidden=“{{condition}}”`也能控制元素的显示与隐藏
+
+   ```html
+   <view hidden="{{condition}}">条件为 true 隐藏，条件为 false 显示</view>
+   ```
+
+4. ### wx:if与hidden的对比
+
+   1. 运行方式不同
+      - `wx:if`以动态创建和移除元素的方式，控制元素的展示与隐藏
+      - `hidden`以切换样式的方式（`display：none/block;`）,控制元素的显示与隐藏
+   2. 使用建议
+      - 频繁切换时，建议使用`hidden`
+      - 控制条件复杂时，建议使用`wx:if`搭配`wx:elif`、`wx:else`进行展示与隐藏的切换
+
+## 列表渲染
+
+1. ## wx:for
+
+   通过wx:for可以根据指定的数组，循环渲染重复的组件结构
+
+   ```html
+   <view wx:for="{{arr1}}" wx:key="index">
+    索引是：{{index}},item项是：{{item}}
+   </view>
+   ```
+
+   默认情况下，当前循环项的**索引**用**index**表示；**当前循环项**用**item**表示
+
+2. ### 手动指定索引和当前项的变量名
+
+   - 使用`wx:for-index`可以指定**当前循环项的索引**的变量名
+
+   - 使用`wx:for-item`可以指定**当前项**的变量名
+
+     ```html
+     <view wx:for="{{arr1}}" wx:key="id" wx:for-index="ids" wx:for-item="itemName">
+      索引是：{{ids}},item项是：{{itemName}}
+     </view>
+     ```
+
+3. wx:key的使用
+
+   类似于Vue列表渲染中的:key,小程序实例列表渲染时，也建议为渲染出来的列表项指定唯一的key值，从而提高渲染的效率
+
+   ```html
+   <!-- arr1: [{id: '001',name: '苹果'}, {id: '002',name: '华为'}, {d: '003',name: '小米'}] -->
+   <view wx:for="{{arr1}}" wx:key="id">
+     索引是：{{item.id}},item项是：{{item.name}}
+   </view>
+   ```
+
+   **wx:key="id"**
+
+# WXSS模板样式
+
+1. ### 什么是WXSS
+
+   **WXSS(weixin style sheets)**是一套**样式语言**，用于梅花`WXML`的组件样式，类似于网页开发中的`CSS`
+
+2. ### wxss和css的关系
+
+   wxss具有css大部分特性，同时，wxss还对css进行了扩充有以及修改，以适应微信小程序的开发
+
+   - **rpx**尺寸单位
+   - **@import**样式导入
+
+## rpx
+
+1. ### 什么是rpx尺寸单位
+
+   rpx(responsive pixel)是微信小程序独有的，用来**解决屏适配的尺寸单位**。
+
+2. ### rpx的实现原理
+
+   当前屏幕的总宽度为750rpx
+
+3. ### rpx与px之间的单位换算
+
+   以iPhone6为例
+
+   1rpx = 0.5px = 1物理像素
+
+   **建议使用iPhone6作为视觉稿的标准**
+
+## 样式导入
+
+1. 什么是样式导入
+
+   使用WXSS提供的@import语法，可以导入外联的样式表。
+
+2. @import的语法格式
+
+   **@import**后跟需要导入的外联样式表的**相对路径**，用；表示语句结束
+
+   ```css
+   .username {
+    color:red;
+   }
+   ```
+
+   ```css
+   @import "/common/common.wxss";
+   input {
+     border: 1px solid #ccc;
+     margin: 10rpx;
+     padding: 10rpx;
+     border-radius: 6rpx;
+   }
+   ```
+
+## 全局样式和局部样式
+
+1. ### 全局样式
+
+   定义在 **app.wxss**中的样式为**全局样式**，作用与每一个页面。
+
+2. ### 局部样式
+
+   在页面的.wxss文件中定义的样式为局部样式，只作用于当前页面。
+
+   1. 当局部样式与全局样式冲突时，根据就近原则，局部央视会覆盖全局样式
+   2. 当局部央视的**权重大于或等于**全局样式的权重时，才会覆盖全局样式
+
+## 全局配置
+
+1. ### 全局配置文件及常用的配置项
+
+   小程序根目录下的`app.json`文件时小程序的**全局配置文件**
+
+   1. pages
+      - 记录当前小程序所有页面的存放路径
+   2. window
+      - 全局设置小程序窗口的外观
+   3. tabBar
+      - 设置小程序底部的tabBar效果
+   4. style
+      - 是否启用新版的组件样式
+
+2. ### window
+
+   1. #### 小程序窗口的组成部分
+
+      - navigationBar导航栏区域
+      - background背景区域默认不可见，下拉才显示
+      - 页面的主体区域，用来显示wxml中的布局
+
+   2. #### 了解window节点常用的配置项
+
+      |            属性名            |   类型   | 默认值  |                    说明                    |
+      | :--------------------------: | :------: | :-----: | :----------------------------------------: |
+      |    navigationBarTitleTest    |  String  | 字符串  |             导航栏标题文字内容             |
+      | navigationBarBackgroundColor | HexColor | #000000 |         导航栏背景颜色，如#000000          |
+      |    navigationBarTextStyle    |  String  |  white  |     导航栏标题颜色，仅支持black/white      |
+      |       backgroundColor        | HexColor | #ffffff |               窗口的背景颜色               |
+      |     backgroundTextStyle      |  String  |  dark   |    下拉loading的样式，仅支持dark/light     |
+      |     enablePullDownfresh      | Boolean  |  false  |            是否全局开启下拉刷新            |
+      |    onReachBottomDistance     |  Number  |   50    | 页面上拉触底事件时距页面底部距离，单位为px |
+
+   3. #### 下拉刷新enablePullDownfresh
+
+      下拉刷新是移动端的专有名词，指的是通过手指在品目上的下拉操作，从而重新加载页面数据的行为
+
+   4. #### 设置下拉刷新的背景色backgroundColor
+
+   5. #### 下拉刷新的loading样式backgroundTextStyle
+
+   6. #### 设置上拉触底的距离onReachBottomDistance
+
+3. ### 什么是tabBar
+
+   tabBar是移动端应用常见的页面效果，用于实现多页面的快速切换。小程序中通常将其分为：
+
+   - 顶部tabBar
+   - 底部tabBar
+
+   注意
+
+   - tabBar中只能配置最少2个，最多5个tab页签
+   - 当渲染顶部tabBar时，不显示icon，只显示文本
+
+4. ### tabBar的6个组成部分
+
+   1. backgroundColor:tabBar的背景颜色
+   2. selectedconPath:选中时的图片路径
+   3. borderStyle:tabBar上边框的颜色
+   4. iconPath:未选中时的图片路径
+   5. color:tab上文字的默认（未选中）颜色
+   6. selectedColor:tab上的文字选中时的颜色
+
+   |      属性       |   类型    |  必填  | 默认值 |                 描述                  |
+   | :-------------: | :-------: | :----: | :----: | :-----------------------------------: |
+   |    position     |  String   |   否   | bottom |    tabBar的位置，仅支持bottom/top     |
+   |   borderStyle   |  String   |   否   | black  | tabBar上边框的颜色，仅支持black/white |
+   |      color      | HexColor  |   否   |        |     tab上文字的默认（未选中）颜色     |
+   |  selectedColor  | HexColor  |   否   |        |       tab上文字的默认选中的颜色       |
+   | backgroundColor | hexColor  |   否   |        |            tabBar的背景色             |
+   |    **list**     | **Array** | **是** |        |  **tab页面的列表、最少2个、最多5个**  |
+
+   **list 里的页面其中一个必须在pages中排第一个**
+
+5. 每个tab项的配置选项
+
+   |       属性       |  类型  | 必填 |                       描述                        |
+   | :--------------: | :----: | :--: | :-----------------------------------------------: |
+   |     pagePath     | String |  是  |        页面路径，页面必须在pages中预先定义        |
+   |       text       | String |  是  |                  tab上显示的文字                  |
+   |     iconPath     | String |  否  | 未选中时的图标路径；当position为top时，不显示icon |
+   | selectediconPath | String |  否  |  选中时的图标路径；当position为top时，不显示icon  |
+
+   
