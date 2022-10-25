@@ -1,0 +1,32 @@
+<!--pages/list2/list2.wxml-->
+<swiper class="swiper-container" indicator-dots indicator-active-color="gray" indicator-color="white" circular>
+  <!-- 第一个轮播图 -->
+  <swiper-item class="item">A</swiper-item>
+  <!-- 第二个轮播图 -->
+  <swiper-item class="item">B</swiper-item>
+  <!-- 第三个轮播图 -->
+  <swiper-item class="item">C</swiper-item>
+</swiper>
+<!-- text标签的使用 -->
+<view>
+手机号支持长按选中效果
+<text selectable>12345678900</text>
+</view>
+<!-- rich-text标签的使用 -->
+<rich-text nodes="<h1 style='color:red'>标题</h1>"></rich-text>
+
+<!-- button按钮组件的使用 -->
+<!-- 通过type属性指定按钮颜色类型 -->
+<button>普通按钮</button>
+<button type="default">绿色字体按钮</button>
+<button type="primary">主色调按钮</button>
+<button type="warn">警告按钮</button>
+<!-- size="mini"小尺寸按钮 -->
+<button size="mini">普通按钮</button>
+<button size="mini" type="default">绿色字体按钮</button>
+<button size="mini" type="primary">主色调按钮</button>
+<button size="mini" type="warn">警告按钮</button>
+<!-- plain镂空按钮 -->
+<button plain type="default">绿色字体按钮</button>
+<button plain type="primary">主色调按钮</button>
+<button plain type="warn">警告按钮</button>

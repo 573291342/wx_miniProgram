@@ -182,6 +182,257 @@
    2. **逻辑层**和**第三方服务器**之间的通信
       - 由微信客户端进行转发
 
+6. ### 小程序启动的过程
+
+   1. 小程序的代码包下载到本地
+   2. 解析`app.json`全局配置文件
+   3. 执行`app.js`小程序入口文件，调用`App()`创建小程序实例
+   4. 渲染小程序的首页
+   5. 小程序启动完成
+
+7. ### 页面渲染的过程
+
+   1. 加载计息页面的`.json`配置文件
+   2. 加载页面的`.wxml`模板和`.wxss`样式
+   3. 执行页面的`.js`文件，**调用Page()创建页面实例**
+   4. 页面渲染完成
+
+8. ### 小程序的组件分类
+
+   1. **视图容器**
+      1. **view**
+         - 普通视图区域
+         - 类似于HTML中的div,是一个块级元素
+         - 常用来实现页面的布局效果
+
+      2. **scroll-view**
+         - 可滚动的视图区域
+         - 常用来实现滚动列表效果
+
+      3. **swiper和swiper-item**
+         - 轮播图容器组件和轮播图item组件
+
+   2. **基础内容**
+      1. text
+         - 文本组件
+         - 类似于HTML中的span标签，是一个行内元素
+
+      2. rich-text
+         - 富文本组件
+         - 支持把HTML文字字符串渲染为WXML结构
+
+   3. **表单组件**
+   4. **导航组件**
+   5. 媒体组件
+   6. map地图组件
+   7. canvas画布组件
+   8. 开放能力
+   9. 无障碍访问
+
+9. ### view组件的基本使用
+
+   实现如图的flex横向布局效果
+
+   ```html
+   <!--pages/list/list.wxml-->
+   <view class="container1">
+     <view>A</view>
+     <view>B</view>
+     <view>C</view>
+   </view>
+   ```
+
+   ```css
+   /* pages/list/list.wxss */
+   
+   .container1 {
+    display: flex;
+    justify-content: space-around;
+   }
+   .container1 view {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+   }
+   .container1 view:nth-child(1) {
+    background-color: lightgreen;
+   }
+   .container1 view:nth-child(2) {
+    background-color: lightskyblue;
+   }
+   .container1 view:nth-child(3) {
+    background-color: lightpink;
+   }
+   ```
+
+   实现纵向滚动的效果：
+
+   ```html
+   <!--pages/list/list.wxml-->
+   <scroll-view scroll-y class="container1">
+    <view>A</view>
+    <view>B</view>
+    <view>C</view>
+   </scroll-view>
+   ```
+
+   ```css
+   /* pages/list/list.wxss */
+   
+   .container1 {
+    position: relative;
+    border: 1px solid red;
+    width: 100px;
+    height: 100px;
+   }
+   .container1 view {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+   }
+   .container1 view:nth-child(1) {
+    background-color: lightgreen;
+   }
+   .container1 view:nth-child(2) {
+    background-color: lightskyblue;
+   }
+   .container1 view:nth-child(3) {
+    background-color: lightpink;
+   }
+   ```
+
+   横向滚动要为每一个盒子加横向的定位
+
+   实现轮播图的效果
+
+   ```html
+   <!--pages/list2/list2.wxml-->
+   <swiper indicator-dots class="swiper-container">
+     <!-- 第一个轮播图 -->
+     <swiper-item class="item">A</swiper-item>
+     <!-- 第二个轮播图 -->
+     <swiper-item class="item">B</swiper-item>
+     <!-- 第三个轮播图 -->
+     <swiper-item class="item">C</swiper-item>
+   </swiper>
+   ```
+
+   |          属性          |  类型   |    默认值     |         说明         |
+   | :--------------------: | :-----: | :-----------: | :------------------: |
+   |     indicator-dots     | boolean |     false     |  是否显示面板指示点  |
+   |    indicator-color     |  color  | rgba(0,0,0,3) |      指示点颜色      |
+   | indicator-active-color |  color  |    #000000    | 当前选中的指示点颜色 |
+   |        autoplay        | boolean |     false     |     是否自动切换     |
+   |        interval        | number  |     5000      |   自动切换时间间隔   |
+   |        circular        | boolean |     false     |   是否采用衔接滑动   |
+
+   ```css
+   /* pages/list2/list2.wxss */
+   .swiper-container {
+    height: 150px;
+   }
+   .item {
+    height: 100%;
+    line-height: 150px;
+    text-align: center;
+   }
+   .swiper-container .item:nth-child(1) {
+    background-color: lightgreen;
+   }
+   .swiper-container .item:nth-child(2) {
+    background-color: lightskyblue;
+   }
+   .swiper-container .item:nth-child(3) {
+    background-color: lightpink;
+   }
+   ```
+
+10. ### text组件的基本使用
+
+    通过text组件的selectable属性，实现长按选中文本内容的效果
+
+    ```html
+    <view>
+    手机号支持长按选中效果
+    <text selectable>12345678900</text>
+    </view>
+    ```
+
+    通过rich-text组件的nodes属性节点，把HTML字符串渲染为对应的UI结构(**类似于字符串模板**)
+
+    ```html
+    <rich-text nodes="<h1 style='color:red'>标题</h1>"></rich-text>
+    ```
+
+11. ### 其他常用组件
+
+    1. **button**
+       - 按钮组件
+       - 功能比HTML中的button按钮丰富
+       - 通过open-type属性可以调用微信提供的各种功能(客服、转发、获取用户授权、获取用户信息)
+    2. **image**
+       - 图片组件
+       - image组件默认宽度约300px、高度约240px
+    3. **navigator**
+       - 页面导航组件
+       - 类似于HTML中的a链接
+
+12. ### button按钮组件的基本使用
+
+    | 属性  |          值          |     描述     |
+    | :---: | :------------------: | :----------: |
+    | type  | default\primary\warn |  按钮的类型  |
+    | size  |         mini         | 小尺寸的按钮 |
+    | plain |        plain         |   镂空按钮   |
+
+13. ### image组件的基本使用
+
+    ```html
+    <image src=""></image>
+    ```
+
+14. ### image组件的mode属性
+
+    在image组件的mode属性用来指定图片的裁剪和缩放模式
+
+    |   mode值    |                    说明                    |
+    | :---------: | :----------------------------------------: |
+    | scaleToFill |            不保持纵横比缩放图片            |
+    |  aspectFit  |      保持纵横比缩放图片,保证长边显示       |
+    | aspectFill  |      保持纵横比缩放图片,保证短边显示       |
+    |  widthFix   | 宽度不变，高度自动变化，保持原图宽高比不变 |
+    |  heightFix  | 高度不变，宽度自动变化，保持原图宽高比不变 |
+
+15. ### 小程序API概述
+
+    **小程序中的API是由宿主环境提供的**，通过这些API,开发者可以方便的调用微信提供的能力，如获取用户信息，本地存储，支付功能等
+
+    1. **事件监听API**
+       - 特点：以on开头，用来监听某些事件的触发
+       - 举例：`wx.onWindowResize(function callback)`监听窗口尺寸变化的事件
+    2. **同步API**
+       - 特点：以`Sync`结尾的API都是同步API
+       - 特点：同步API的执行结果，可以通过函数返回值直接获取，如果执行出错会抛出异常
+       - 举例：`wx.setStorageSync('key','value')`向本地存储中写入内容
+    3. **异步API**
+       - 特点：类似于jQuery中的`$.ajax(option)`函数，需要通过`success`、`fail`、`complete`接受调用的结果
+       - 举例：`wx.request()`发起网络数据请求，通过success回调数据接受数据
+
+16. ### 了解权限管理需求
+
+    出于管理需求，我们迫切需要对不同岗位，不同角色的员工的权限进行辩解的划分，使他们能够高效的进行协同工作。
+
+    组织结构：
+
+    ​	管理者
+
+    1. 产品组
+    2. 设计组
+    3. 开发组
+    4. 测试组
+
 ## 生命周期
 
 1. ### 什么是生命周期

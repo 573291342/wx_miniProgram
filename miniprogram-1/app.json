@@ -1,10 +1,11 @@
 {
   "pages":[
+    "pages/list/list",
     "pages/index/index",
     "pages/logs/logs",
-    "pages/list/list"
+    "pages/list2/list2"
   ],
-  "window":{
+  "window":{ 
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Weixin",
