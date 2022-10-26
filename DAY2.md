@@ -564,8 +564,6 @@
 
    wxss:
 
-   /
-
    ```css
    * pages/home/home.wxss */
    swiper {

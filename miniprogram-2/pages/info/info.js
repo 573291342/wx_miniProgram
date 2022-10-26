@@ -1,43 +1,25 @@
-// pages/test/test.js
+// pages/info/info.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    colorList:[],
-    isLoading: false
+    query:{}
   },
-
-  getColors(){
-    this.setData({
-      isLoading:true
-    })
-    wx.showLoading({
-      title: '数据加载中...',
-    })
-    wx.request({
-      url:'https://escook.cn/api/color',
-      method:'get',
-      success:({data:res})=>{
-        this.setData({
-          colorList:[...this.data.colorList,...res.data]
-        })
-      },
-      complete:()=>{
-        wx.hideLoading()
-        this.setData({
-          isLoading:false
-        })
-      }
-    })
+  //编程式导航后退
+  goBack(){
+    wx.navigateBack()
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.getColors()
+    console.log(options);
+    this.setData({
+      query:options
+    })
   },
 
   /**
@@ -72,15 +54,14 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-
+    
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    if (this.data.isLoading) return
-    this.getColors()
+
   },
 
   /**
@@ -88,5 +69,5 @@ Page({
    */
   onShareAppMessage() {
 
-  },
+  }
 })

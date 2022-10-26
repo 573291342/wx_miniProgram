@@ -1,3 +1,5 @@
 <!--pages/test/test.wxml-->
-<button bindtap="getInfo">发起GET请求</button>
-<button bindtap="postInfo">发起POST请求</button>
+
+<view wx:for="{{colorList}}" wx:key="index" class="num-item" style="background-color: rgba({{item}});">
+{{item}}
+</view>
