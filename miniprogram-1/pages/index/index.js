@@ -33,8 +33,38 @@ Page({
       msg: e.detail.value
     })
   },
+  //发起get数据请求
+  getInfo(){
+    wx.request({
+      url:'https://www.escook.cn/api/get',
+      method:'get',
+      data:{
+        name:'zs',
+        age:20
+      },
+      success:(res)=>{
+        console.log(res.data);
+      }
+    })
+  },
+  //发起post数据请求
+  postInfo(){
+    wx.request({
+      url:'https://www.escook.cn/api/post',
+      method:'post',
+      data:{
+        name:'ls',
+        age:33
+      },
+      success:(res)=>{
+        console.log(res.data);
+      }
+    })
+  },
+  //监听页面加载事件
   onLoad() {
-
+    this.getInfo(),
+    this.postInfo()
   },
   getUserProfile(e) {
 

@@ -23,3 +23,6 @@
 <!-- <view wx:for="{{arr1}}" wx:key="id" wx:for-index="ids" wx:for-item="itemName">
   索引是：{{ids}},item项是：{{itemName}}
 </view> -->
+
+<button bindtap="getInfo">发起GET请求</button>
+<button bindtap="postInfo">发起POST请求</button>

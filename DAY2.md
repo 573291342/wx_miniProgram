@@ -424,7 +424,7 @@
 
    **list 里的页面其中一个必须在pages中排第一个**
 
-5. 每个tab项的配置选项
+5. ### 每个tab项的配置选项
 
    |       属性       |  类型  | 必填 |                       描述                        |
    | :--------------: | :----: | :--: | :-----------------------------------------------: |
@@ -433,4 +433,247 @@
    |     iconPath     | String |  否  | 未选中时的图标路径；当position为top时，不显示icon |
    | selectediconPath | String |  否  |  选中时的图标路径；当position为top时，不显示icon  |
 
+
+## 页面配置
+
+1. ### 页面配置文件的作用
+
+   小程序中，每个页面都有自己的.json配置文件，用来对当前的窗口外观，页面效果等进行配置。
+
+2. ### 页面配置和全局配置的区别
+
+   小程序中，app.json中的window节点，可以全局配置小程序中每个页面的窗口表现。
+
+   如果某些小程序页面想要拥有特殊的窗口表现，此时，“页面级别的.json配置文件”就可以实现这种需求。
+
+   当页面配置与全局配置冲突的时候，以页面配置为准
+
+3. ### 页面配置中常用的配置项
+
+   **参考window节点常用配置项**
+
+## 网络数据请求
+
+1. ### 小程序的限制
+
+   出于安全考虑，小程序官方对数据接口的请求做出了如下限制：
+
+   1. 只能请求HTTPS类型接口
+
+   2. 必须将接口的域名添加到信任列表中
+
+      **开发者工具->详情->域名信息->request合法域名**
+
+2. ### 配置request合法域名
+
+   **登录微信小程序的管理后台->开发->开发配置->服务器域名->修改request合法域名**
+
+   注意：
+
+   1. 域名只支持https协议
+   2. 域名不能使用IP地址或localhost
+   3. 域名必须经过ICP备案
+   4. 服务器域名一个月内最多可以申请5次修改
+
+3. ### 发起GET请求
+
+   调用`wx.request()`方法，发起GET数据请求
+
+   ```js
+   url:'https://www.escook.cn/api/get',
+      method:'get',
+      data:{
+       name:'zs',
+       age:20
+      },
+      success:(res)=>{
+       console.log(res.data);
+      }
+     })
+   ```
+
+4. ### 发起POST请求
+
+   调用`wx.request()`方法，发起POST数据请求
+
+   ```js
+   wx.request({
+      url:'https://www.escook.cn/api/post',
+      method:'post',
+      data:{
+   ​    name:'ls',
+   ​    age:33
+      },
+      success:(res)=>{
+   ​    console.log(res.data);
+      }
+     })
+   ```
+
+5. ### 在页面加载时请求数据
+
+   在页面的onLoad事件中调用获取数据的函数
+
+   ```js
+   //监听页面加载事件
+    onLoad() {
+     this.getInfo(),
+     this.postInfo()
+    },
+   ```
+
+6. ### 跳过request合法域名校验
+
+   **开发者工具->详情->本地设置->不校验合法域名...以及HTTPS证书**
+
+   注意：这个选项只能在开发调试时候使用
+
+7. ### 关于跨域和Ajax的说明
+
+   1. 跨域只存在于基于浏览器的web开发中，由于小程序的宿主环境是微信而不是浏览器，所以不存在跨域问题。
+   2. Ajax核心技术是依赖于浏览器中的XMLHttpRequest这个对象，由于小程序的宿主环境是微信客户端，所以小程序中不能叫做“发起Ajax请求”，而是叫做“发起网络数据请求”
+
+8. ### 案例
+
+   **参考miniprogram-3的首页**
+
+   wxml:
+
+   ```html
+   <!-- 轮播图区域 -->
+   <swiper autoplay circular indicator-dots>
+     <swiper-item wx:for="{{swiperList}}" wx:key="id">
+       <image src="{{item.image}}"></image>
+     </swiper-item>
+   </swiper>
    
+   <!-- 九宫格区域 -->
+   <view class="grid-list">
+     <view class="girs-item" wx:for="{{getGridList}}" wx:key="id">
+       <image src="{{item.icon}}"></image>
+       <text>{{item.name}}</text>
+     </view>
+   </view>
+   
+   <!-- 图片区域 -->
+   <view class="image-box">
+     <view class="left"></view>
+     <view class="right"></view>
+   </view>
+   ```
+
+   wxss:
+
+   /
+
+   ```css
+   * pages/home/home.wxss */
+   swiper {
+    height: 350rpx;
+   }
+   swiper image {
+    width: 100%;
+    height: 100%;
+   }
+   .grid-list {
+    display: flex;
+    flex-wrap: wrap;
+    border-left: 1rpx solid #efefef;
+    border-top: 1rpx solid #efefef;
+   }
+   .girs-item {
+    width: 33.33%;
+    height: 200rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1rpx solid #efefef;
+    border-right: 1rpx solid #efefef;
+    box-sizing: border-box;
+   }
+   .girs-item image {
+    width: 60rpx;
+    height: 60rpx;
+   }
+   .girs-item text {
+    font-size: 24rpx;
+    margin-top: 10rpx;
+   }
+   .image-box {
+    display: flex;
+    justify-content: space-around;
+   }
+   .image-box .left,
+   .image-box .right {
+    width: 50%;
+    height: 180rpx;
+    border-radius: 20rpx;
+   }
+   .image-box .left{
+    background-color: pink;
+   }
+   .image-box .right{
+    background-color: skyblue;
+   }
+   ```
+
+   .js文件
+
+   ```js
+   // pages/home/home.js
+   Page({
+     /**
+      * 页面的初始数据
+        */
+          data: {
+            swiperList:[],
+            gridList:[]
+          },
+     /**
+      * 生命周期函数--监听页面加载
+        */
+          onLoad(options) {
+            this.getSwiperList()
+            this.getGridList()
+          },
+     //获取轮播图数据的方法
+     getSwiperList(){
+       wx.request({
+         url: 'https://www.escook.cn/slides',
+         method:'GET',
+         success:(res)=>{
+           // console.log(red.data);
+           this.setData({
+             swiperList:res.data
+           })
+         }
+       })
+     },
+     getGridList(){
+       wx.request({
+         url: 'https://www.escook.cn/categories',
+         method:'GET',
+         success:(res)=>{
+           // console.log(res.data);
+           this.setData({
+             getGridList:res.data
+           })
+         }
+       })
+     },
+   })
+   ```
+
+9. ### 总结
+
+   1. 能够使用WXML模板语法渲染页面结构
+      - **wx:if**、wx:elif、wx:else、**hidden、wx:for、wx:key**
+   2. 能够使用WXSS样式美化页面结构
+      - **rpx尺寸单位**、@import样式导入、全局样式和局部样式
+   3. 能够使用app.json对小程序进行全局性配置
+      - pages、**window**、**tabBar**、style
+   4. 能够使用page.json对小程序页面进行个性化配置
+      - 对单个页面进行个性化配置、**就近原则**
+   5. 能够知道如何发起网络数据请求
+      - **wx:request()方法**、**onLoad()事件**
