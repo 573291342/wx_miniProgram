@@ -4,7 +4,8 @@
     "pages/index/index",
     "pages/message/message",
     "pages/contact/contact",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/shoplist/shoplist"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -5,7 +5,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    count: 0
+    count: 0,
+    username: 'zs',
+    country: 'CHINA'
   },
   //count处理函数
   addCount(){

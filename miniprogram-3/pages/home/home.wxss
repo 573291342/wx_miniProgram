@@ -39,7 +39,7 @@ swiper image {
 }
 .image-box .left,
 .image-box .right {
-  width: 50%;
+  width: 45%;
   height: 180rpx;
   border-radius: 20rpx;
 }

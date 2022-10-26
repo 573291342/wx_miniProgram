@@ -1,8 +1,1 @@
 <!--index.wxml-->
-测试页面
-<!-- 可省略delta -->
-<navigator open-type="navigateBack" delta="1">后退</navigator>
-<button bindtap="goBack">编程式后退一个页面</button>
-<view>
-姓名：{{query.username}},性别：{{query.gender}}
-</view>

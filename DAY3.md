@@ -415,4 +415,134 @@
 
 # WXS脚本
 
+## 概述
+
+1. ### 什么是wxs
+
+   wxs(Weixin Script)是小程序独有的一套脚本语言，结合WXML,可以构建出页面的结构。
+
+2. ### wxs的实际应用场景
+
+   **wxml中无法调用在页面的.js中定义的函数**，但是，wxml中可以调用wxs中定义的函数，因此，小程序中wxs的**典型应用场景就是**“**过滤器**”
+
+3. wxs和JavaScript的关系
+
+   虽然wxs的语法类似于JavaScript，但是wxs和JavaScript是完全不同的两种语言
+
+   1. wxs有自己的数据类型
+      - number数值类型、string字符串类型、Boolean布尔类型、object对象类型、function函数类型、array数组类型、data日期类型、regexp正则
+   2. wxs不支持类似于ES6及以上的语法形式
+      - 不支持：let、const、解构赋值、展开运算符、箭头函数、对象属性简写、etc...
+      - 支持：var定义变量、普通function函数类似于ES5的语法
+   3. wxs遵循CommonJS规范
+      - module对象
+      - require()函数
+      - module.exports对象
+
+## 普通语法
+
+1. ### 内嵌wxs脚本
+
+   wxs代码可以编写在wxml文件中的`<wxs>`标签内，就像JavaScript代码可以编写在html文件中的`<script>`标签内一样
+
+   wxml文件中的每一个`<wxs></wxs>`标签，**必须提供module属性**，用来指定**当前wxs的模块名称**，方便在wxml中访问模块中的成员：
+
+   ```js
+   <view>{{m1.toUpper(username)}}</view>
+   <wxs module="m1">
+    module.exports.toUpper = function(str){
+     return str.toUpperCase()
+    }
+   </wxs>
+   ```
+
+2. ### 定义外联的wxs脚本
+
+   wxs代码还可以编写在以.wxs为后缀名的文件内，就像JavaScript代码可以编写在以.js为后缀名的文件中一样。
+
+   ```js
+   function tolower(str){
+    return str.tolowerCase()
+   }
+   module.exports = {
+    tolower:tolower
+   }
+   ```
+
+3. ### 使用外联的wxs脚本
+
+   在wxml中引入外联的wxs脚本，必须为`<wxs>`标签添加module和src属性
+
+   - module用来指定模块的名称
+   - src用来指定要引入的脚本路径，且必须是相对路径
+
+   ```html
+   <view>{{m2.toLower(country)}}</view>
+   
+   <wxs src="../../utils/tools.wxs" module="m2"></wxs>
+   ```
+
+## wxs的特点
+
+1. ### 与JavaScript不同
+
+   为了降低wxs的学习成本，wxs语言在设计时大量借鉴了JavaScript的语法。但是本质神，wxs和JavaScript是完全把不同的两种语言。
+
+2. ### 不能作为组件的事件回调
+
+   wxs典型的应用场景就是“过滤器”，经常配合Mustache语法进行使用
+
+   ```html
+   <view>{{m2.toLower(country)}}</view>
+   ```
+
+   但是，在wxs中定义的函数不能作为组件的事件回调函数。
+
+   ``` html
+   <!-- 错误用法 -->
+   <button bindtap="m2.toLower">按钮</button>
+   ```
+
+3. ### 隔离性
+
+   隔离性指的是wxs的运行环境和其他JavaScript代码是隔离的
+
+   1. wxs不能调用.js中定义的函数
+   2. wxs不能调用小程序提供的API
+
+4. ### 性能好
+
+   - 在iOS设备上，小程序内的WXS会比JavaScript代码快2~20倍
+   - 在Android设备上，二者运行效率无差异
+
 # 案例
+
+1. ### 列表页面的API接口
+
+   以分页的形式，加载指定分类下商铺列表的数据：
+
+   1. 接口地址
+      - https://www.escook.cn/categories/:cate_id/shops
+      - URL地址中的:cate_id是动态参数，表示分类id
+   2. 请求方式
+      - GET请求
+   3. 请求参数
+      - _page表示请求第几页数据
+      - _limit表示每页请求几条数据
+
+2. ### 判断是否还有下一页数据
+
+   页码值*每页显示多少条数据>=总数据条数
+
+# 总结
+
+1. 能够知道如何实现页面之间的导航跳转
+   - 声明式导航、编程式导航
+2. 能偶知道如何实现下拉刷新效果
+   - enablePullDownRefresh、**onPullDownRefresh**
+3. 能够知道如何实现上拉加载更多效果
+   - onReachBottomDistance、**onReachBottom**
+4. 能够知道小程序中常用的生命周期函数
+   - 应用生命周期函数：**onLaunch**,onShow,onHidde
+   - 页面生命周期函数：**onLoad**,onShow,**onReady**,onHide,onUnload
+
