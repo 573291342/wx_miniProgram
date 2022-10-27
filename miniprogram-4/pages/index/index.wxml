@@ -1,0 +1,18 @@
+<!--index.wxml-->
+<!-- <text class="g-red-text">pages/index/index.wxml</text> -->
+<!-- 在页面的.wxml文件中，使用组件 -->
+<!-- <view></view>
+<my-test1 max="9"></my-test1> -->
+<!-- <my-test2></my-test2> -->
+
+<!-- 插槽 -->
+<!-- <my-test4>
+  <view slot="before">这是通过插槽填充的内容</view>
+  <view slot="after">---------------</view>
+</my-test4> -->
+
+<!-- 父组件向子组件传值 -->
+<my-test5 count="{{count}}" bind:sync="syncCount"></my-test5>
+<view>----------------</view>
+<view>父组件中，count值是：{{count}}</view>
+
