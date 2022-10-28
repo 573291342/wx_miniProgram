@@ -535,7 +535,7 @@
    2. 同名的属性字段（properties）或方法（methods）
    3. 同名的生命周期函数
 
-   详细见[开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html##同名字段的覆盖和组合规则)
+   详细见[开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html#同名字段的覆盖和组合规则)
 
 # 使用npm包
 
