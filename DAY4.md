@@ -448,35 +448,94 @@
 
    事件绑定用于实现**子组件向父传值**，可以传递任何类型的数据。
 
-   1. 在**父组件**的.js中，定义一个函数，这个函数**即将**通过自定义事件的形式，传递给子组件
+   在**父组件**的.js中，定义一个函数，这个函数**即将**通过自定义事件的形式，传递给子组件
 
-       `syncCount(e){},`
+   `syncCount(e){},`
 
-   2. 在**父组件**的wxml,通过自定义事件的形式，将步骤1中送一的函数引用，传递给子组件
+   在**父组件**的wxml,通过自定义事件的形式，将步骤1中送一的函数引用，传递给子组件
 
-      `<my-test5 count="{{count}}" bind:sync="syncCount"></my-test5>`
+   `<my-test5 count="{{count}}" bind:sync="syncCount"></my-test5>`
 
-   3. 在**子组件**的.js中，通过调用`this.triggerEvent('自定义事件名称',{/*参数对象*/})`，将数据发送到父组件
+   在**子组件**的.js中，通过调用`this.triggerEvent('自定义事件名称',{/*参数对象*/})`，将数据发送到父组件
 
-      ```js
-      methods: {
-         //触发自定义事件，对数值同步给父组件
-         this.triggerEvent('sync', {
-      ​    value: this.properties.count
-         })
-        }
-       }
-      ```
+   ```js
+   methods: {
+      //触发自定义事件，对数值同步给父组件
+      this.triggerEvent('sync', {
+   ​    value: this.properties.count
+      })
+     }
+    }
+   ```
 
-   4. 在**父组件**的.js中，通过`e.detail`获取到子组件传递过来的数据
+   在**父组件**的.js中，通过`e.detail`获取到子组件传递过来的数据
 
-      ```html
-      syncCount(e){
-        this.setData({
-         count:e.detail.value
-        })
-       },
-      ```
+   ```html
+   syncCount(e){
+     this.setData({
+      count:e.detail.value
+     })
+    },
+   ```
+
+4. ### 获取组件实例
+
+   可以在父组件里调用`this.selectComponent("id或class选择器")`，获取子组件的实例对象，从而直接访问子组件的任意数据和方法。调用时需要传入一个选择器，例如`this.selectComponent(".my-component")`
+
+   ```js
+    getChild(){
+     const child = this.selectComponent('#CA')
+     console.log(child);
+     // child.setData({
+     //  count:child.properties.count + 1
+     // })
+     child.addCount()
+    },
+   ```
+
+## behaviors
+
+1. ### 什么是behaviors
+
+   behaviors是小程序中，用于**实现组件间代码共享**的特性，类似于**Vue.js**中的**“mixins"(混入)**
+
+2. ### behaviors的工作方式
+
+   每个behavior可以包含一组**属性、数据、生命周期函数和方法**。组件引用它时，它的属性、数据和方法**会被合并到组件中**。
+
+   每个组件可以引用多个behavior，behavior也可以引用其它behavior
+
+3. ### 创建behavior
+
+   调用`Behavior(Object object)` 方法即可创建一个**共享的behavior实例对象**，供所有组件使用
+
+4. ### 导入并使用behavior
+
+   在组件中，使用require()方法导入需要的behavior，**挂载后即可访问behavior中的数据或方法**
+
+5. ### behavior中所有可用的节点
+
+   |   可用的节点   |     类型     | 是否必填 |        描述        |
+   | :------------: | :----------: | :------: | :----------------: |
+   | **properties** |  Object Map  |    否    |    同组件的属性    |
+   |    **data**    |    Object    |    否    |    同组件的数据    |
+   |  **methods**   |    Object    |    否    | 同自定义组件的方法 |
+   | **behaviors**  | String Array |    否    | 引入其他的behavior |
+   |    created     |   Function   |    否    |    生命周期函数    |
+   |    attached    |   Function   |    否    |    生命周期函数    |
+   |     ready      |   Function   |    否    |    生命周期函数    |
+   |     moved      |   Function   |    否    |    生命周期函数    |
+   |    detached    |   Function   |    否    |    生命周期函数    |
+
+6. ### 同名字段的覆盖和组合规则
+
+   组件和引用的behavior中可以包含同名字段，此时可以参考一下的3种同名规则
+
+   1. 同名的数据字段（data）
+   2. 同名的属性字段（properties）或方法（methods）
+   3. 同名的生命周期函数
+
+   详细见[开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html##同名字段的覆盖和组合规则)
 
 # 使用npm包
 

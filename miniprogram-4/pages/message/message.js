@@ -47,7 +47,15 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    
+    const child = this.selectComponent("#my-test3")
+    child.setData({
+      _rgb:{
+        r:0,
+        g:0,
+        b:0
+      }
+    })
+    wx.stopPullDownRefresh()
   },
 
   /**

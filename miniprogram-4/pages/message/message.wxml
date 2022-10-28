@@ -4,4 +4,4 @@
 <my-test1></my-test1> -->
 
 <!-- 数据监听器-案例 -->
-<my-test3></my-test3>
+<my-test3 id="my-test3"></my-test3>

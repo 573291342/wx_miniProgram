@@ -1,5 +1,11 @@
 // components/test5/test5.js
+
+const myBehavior = require('../../behaviors/my-behavior')
+
 Component({
+
+  behaviors:[myBehavior],
+
   /**
    * 组件的属性列表
    */

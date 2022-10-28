@@ -16,6 +16,15 @@ Page({
       count:e.detail.value
     })
   },
+  //获取子组件实例
+  getChild(){
+    const child = this.selectComponent('#CA')
+    console.log(child);
+    // child.setData({
+    //   count:child.properties.count + 1
+    // })
+    child.addCount()
+  },
 
   /**
    * 生命周期函数--监听页面加载
