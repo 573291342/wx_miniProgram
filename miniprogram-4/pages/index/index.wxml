@@ -17,3 +17,5 @@
 <view>父组件中，count值是：{{count}}</view>
 <button bindtap="getChild">获取子组件的实例对象</button>
 
+
+

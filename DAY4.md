@@ -86,9 +86,9 @@
 
 3. ### 修改组件的样式隔离选项
 
-   默认情况下，自定义组件的样式隔离特性能够防止组件内外样式相互干扰的问题，但有时，我们希望在外界能都控制组件内部的样式，可以通过stylelsolation修改组件的样式隔离选项
+   默认情况下，自定义组件的样式隔离特性能够防止组件内外样式相互干扰的问题，但有时，我们希望在外界能都控制组件内部的样式，可以通过styleIsolation修改组件的样式隔离选项
 
-4. ### stylelsolation的可选值
+4. ### styleIsolation的可选值
 
    ```js
    Component({
@@ -537,7 +537,84 @@
 
    详细见[开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html#同名字段的覆盖和组合规则)
 
+## 总结
+
+1. ### 能够创建并引用组件
+
+   - 全局引用、局部引用、useingComponents
+
+2. ### 能够知道如何修改组件的样式隔离选项
+
+   - options->styleIsolation(isolation,apply-shared,shared)
+
+3. ### 能够知道如何定义和使用数据监听器
+
+   - observers
+
+4. ### 能够知道如何定义和使用纯数据字段
+
+   - options->pureDataPattern
+
+5. ### 能够知道实现组件父子通信有哪三种方式
+
+   - 属性绑定、事件绑定、this.selectComponent("id或class选择器")
+
+6. ### 能够指代如何定义和使用behaviors
+
+   - 调用Behavior()构造器方法
+
 # 使用npm包
+
+小程序对npm包的支持和限制
+
+目前，小程序已经支持使用npm安装第三方包，从而来提高小程序的开发效率。但是，在小程序中使用npm包有如下3个限制：
+
+1. 不支持依赖于Node.js内置库的包
+2. 不支持依赖于浏览器内置对象的包
+3. 不支持依赖于c++插件的包
+
+## Vant Weapp
+
+1. ### 什么是Vant Weapp
+
+   Vant Weapp是有赞前端团队开源的一套**小程序UI组件库**，助力开发之快速搭建小程序应用。它所使用的是MIT开源许可协议，对商业使用比较友好。
+
+   [官方](https://youzan.github.io/vant-weapp)文档地址https://youzan.github.io/vant-weapp
+
+2. ### 安装Vant 组件库
+
+   在小程序项目中，安装Vant 组件库
+
+   1. 通过npm安装（建议指定版本1.3.3）
+   2. 构建npm包
+   3. 修改app.json
+
+   参考[官方文档](https://youzan.github.io/vant-weapp/#/quickstart#an-zhuang)
+
+3. ### 使用Vant组件
+
+   参考[官方文档](https://youzan.github.io/vant-weapp/#/quickstart#shi-yong)
+
+4. ### 定制全局主题样式
+
+   Vant Weapp 使用CSS变量来实现定制主题
+
+   [文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties)
+
+5. ### 定制全局主题样式
+
+   在app.wxss中，写入CSS变量，即可全局生效
+
+   ```css
+   page {
+    --button-danger-background-color:#C00000;
+    --button-danger-border-color:#D60000;
+   }
+   ```
+
+## API Promise化
+
+1. ### 基于回调函数的异步API的缺点
 
 # 全局数据共享
 
