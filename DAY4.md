@@ -583,6 +583,10 @@
 
 2. ### 安装Vant 组件库
 
+   **初始化package.json `npm init -y`**
+
+   **下载之前已经下载的所有包 `npm install`**
+
    在小程序项目中，安装Vant 组件库
 
    1. 通过npm安装（建议指定版本1.3.3）
@@ -616,10 +620,365 @@
 
 1. ### 基于回调函数的异步API的缺点
 
+   默认情况下，小程序官方提供的**异步API**都是**基于回调函数**实现的，例如网络请求的API需要按照如下的方式调用：
+
+   ```js
+   wx.request({
+     method:'',
+     url:'',
+     data:{ },
+     success:()=>{ },
+     fail:()=>{ },
+     complete:()=>{ }
+   })
+   ```
+
+   缺点：容易造成**回调地狱**的问题，代码的**可读性**、**维护性**差
+
+2. ### 什么是API Promise化
+
+   **API Promise化**，指的是**通过额外的配置**，将官方提供的、基于回调函数的异步API，**升级改造为基于Promise的异步API**，从而他提高代码的可读性、可维护性。避免回调地狱的问题
+
+3. ### 实现API Promise化
+
+   在小程序中，实现API Promise化主要依赖于miniprogram-api-promise这个第三方的npm包。
+
+   `npm install --save miniprogram-api-promise`
+
+   ```js
+   //在app.js文件头部中添加
+   import { promisifyAll } from 'miniprogram-api-promise'
+   const wxp = wx.p = {}
+   promisifyAll(wx,wxp)
+   ```
+
+4. ### 调用promise化后的异步API
+
+   ```html
+   //在index.wxml文件中
+   <van-button bindtap="getInfo">vant按钮</van-button>
+   ```
+
+   ```js
+   //在.json文件中
+   async getInfo() {
+     const {data:res} = await wx.p.request({
+      method: 'get',
+      url: 'https://www.escook.cn/api/get',
+      data: {
+   ​    name: 'zs',
+   ​    age: 20
+      }
+     })
+     console.log(res);
+    },
+   ```
+
 # 全局数据共享
+
+1. ### 什么是全局数据共享
+
+   **全局数据共享**(又叫：状态管理)是为了解决**组件之间主句共享**的问题
+
+   开发中常用的全局数据共享方案有：Vuex、Redux、Mobx等。
+
+2. ### 小程序中的全局数据共享方案
+
+   在小程序中，可以使用`mobx-miniprogram`配合`mobx-miniprogram-bindings`实现全局数据共享
+
+   - `mobx-miniprogram`用来**创建Store实例对象**
+   - `mobx-miniprogram-bindings`用来**把Store中的共享数据或方法，绑定到组件或页面中使用**
+
+## Mobx
+
+1. ### 安装Mobx相关的包
+
+   在项目中运行如下的命令，安装Mobx相关的包：
+
+   `npm install --save mobx-miniprogram‘@版本号’ mobx-miniprogram-bindings‘@版本号’`
+
+2. ### 创建Mobx的Store实例
+
+   ```js
+   //在这个.js文件中，专门来创建Store的实例对象
+   import { observable } from 'mobx-miniprogram'
+   export const store = observable({
+    numA: 1,
+    numB: 2,
+    //计算属性
+     get sum(){
+       return this.numA + this.numB
+     },
+     // action 函数，用来修改store中的数据
+     updateNumA: action(function(step){
+       this.numA += step
+     }),
+     updateNumB: action(function(step){
+       this.numB += step
+     })
+   })
+   ```
+
+3. ### 将Store中的成员绑定到页面中
+
+   ```js
+   // pages/message/message.js
+   import { createStoreBindings } from 'mobx-miniprogram-bindings'
+   import { store } from '../../store/store'
+   Page({
+     /**
+   生命周期函数--监听页面加载
+   */
+     onLoad(options) {
+       this.storeBindings = createStoreBindings(this,{
+         store,
+         fields:['numA','numB','sum'],
+         actions:['updateNumA','updateNumB']
+       })
+     },
+     /**
+   生命周期函数--监听页面卸载
+   */
+     onUnload() {
+       this.storeBindings.detroyStoreBindings()
+     },
+   })
+   ```
+
+4. ### 在页面上使用Store中的成员
+
+   ```html
+   //在页面的.wxml中
+   <view>{{numA}}+{{numB}} = {{sum}}</view>
+   
+   <van-button type="primary" bindtap="btnHandler1" data-step="{{1}}">numA+1</van-button>
+   
+   <van-button type="danger" bindtap="btnHandler1" data-step="{{-1}}">numA-1</van-button>
+   ```
+
+   ```js
+   //在页面的.js文件中
+   btnHandler1(e){
+     this.updateNumA(e.target.dataset.step)
+    },
+   ```
+
+5. ### 将Store中的成员绑定到组件中
+
+   ```js
+   import { storeBindingsBehavior } from 'mobx-miniprogram-bindings'
+   import { store } from '../../store/store'
+   Component({
+    behaviors: [storeBindingsBehavior],
+    storeBindings: {
+     //数据源
+     store,
+     fields: {
+      numA: () => store.numA,
+      numB: (store) => store.numB,
+      sum: 'sum',
+     },
+     actions: {
+      updateNumB: 'updateNumB'
+     }
+    },
+    /**
+   
+     \* 组件的方法列表
+   
+     */
+    methods: {
+     btnHandler2(e) {
+      this.updateNumB(e.target.dataset.step)
+     }
+    }
+   })
+   ```
 
 # 分包
 
+1. ### 什么是分包
+
+   分包指的是把一个完整的小程序项目，按照需求划分为不同的子包，在构建时打包成不同的分包，用户使用时按需进行加载。
+
+2. ### 分包的好处
+
+   对小程序进行分包的好处主要有以下两点：
+
+   - 可以**优化小程序启动的下载时间**
+   - 在**多团队共同开发**时可以更好的**解耦协作**
+
+3. ### 分包前项目的构成
+
+   分包前，小程序项目中**所有的页面**和**资源**都被打包到一起，导致整个**项目体积过大**，影响小程序**首次启动的下载时间**。
+
+4. ### 分包后项目的构成
+
+   分包后，小程序项目由**1个主包+多个分包**组成：
+
+   - 主包：一般只包含项目的**启动页面**或**Tab bar页面**、以及所有分包都需要用到的一些**公共资源**。
+   - 分包：只包含和当前分包有关的页面和私有资源
+
+5. ### 分包的加载规则
+
+   1. 在小程序启动时，默认会**下载主包**并**启动主包内页面**
+      - tabBar页面需要放到主包中
+   2. 当用户进入分包内某个页面时，**客户端会把对应分包下载下来**，下载完成后在进行展示
+      - 非tabBar页面可以按照功能的不同，划分为不同的分包之后，进行按需下载
+
+6. ### 分包的体积限制
+
+   目前，小程序分包的大小有以下两个限制：
+
+   - 整个小程序所有分包大小不超过**16M**(主包+所有分包)
+   - 单个分包/主包大小不能超过**2M**
+
+## 使用分包
+
+1. ### 配置方法
+
+   ```js
+   "subPackages": [
+     {
+      "root": "pkgA",
+      "pages": [
+   ​    "pages/cat/cat",
+   ​    "pages/dog/dog"
+      ]
+     },
+     {
+      "root": "pkgB",
+      "pages": [
+   ​    "pages/apple/apple",
+   ​    "pages/banana/banana"
+      ]
+     }
+    ],
+   ```
+
+   **查看包大小：详情->基本信息->本地代码**
+
+2. ### 打包原则
+
+   1.  小程序会按**subpackages**的配置进行分包，subpackages之外的目录将被打包到主包中
+   2. 主包也可以有自己的pages（即最外层的pages字段）
+   3. tabBar页面必须在主包内
+   4. 分包之间不能相互嵌套
+
+3. ### 引用原则
+
+   1. 主包**无法引用**分包的私有资源
+   2. 分包之间**不能相互引用**私有资源
+   3. 分包**可以引用**主包的公共资源
+
+## 独立分包
+
+1. ### 什么时独立包
+
+   独立包本质上也是分包，只不过他比较特殊，可以独立于主包和其他分包而单独运行
+
+2. ### 独立分包和普通分包的区别
+
+   最主要的区别：**是否依赖于主包才能运行**
+
+   - 普通分包必须依赖于主包才能运行
+   - 独立分包可以在不下载主包的情况下，独立运行
+
+3. ### 独立分包的应用场景
+
+   开发者可以按需，将某些**具有一定功能独立性的页面配置到独立分包中**。
+
+   - 当小程序从普通的分包页面启动时，需要首先下载主包
+   - 而独立分包**不依赖主包**即可运行，**可以很大程度上提升分包页面的启动速度**
+
+   **注意：一个小程序可以有多个独立分包**
+
+4. ### 独立分包的配置方法
+
+   `"independent":true`
+
+   ```js
+   "subPackages": [
+     {
+      "root": "pkgA",
+      "pages": [
+       "pages/cat/cat",
+       "pages/dog/dog"
+      ]
+     },
+     {
+      "root": "pkgB",
+      "pages": [
+       "pages/apple/apple",
+       "pages/banana/banana"
+      ],
+      "independent":true
+     }
+    ],
+   ```
+
+5. ### 引用原则
+
+   独立分包和普通分包以及主包之间，是**相互隔绝**的，**不能相互引用彼此的资源**！
+
+   1. 主包**无法引用**独立分包内的私有资源
+   2. 独立分包之间，**不能相互引用**私有资源
+   3. 独立分包和普通分包之间，**不能相互引用**私有资源
+   4. **特别注意**：独立分包不能引用主包内的公共资源
+
+## 分包预下载
+
+1. ### 什么是分包预下载
+
+   分包预下载指的是：在进入小程序的某个页面时，**由框架自动预下载可能需要的分包**，从而提升进入后续分包页面时的启动速度。
+
+2. ### 配置分包预下载
+
+   **预下载分包的行为，会在进入指定的页面时触发**。在app.json中，使用`preloadRule`节点定义分包的预下载规则
+
+   ```js
+   //在app.json 与pages节点平级
+   "preloadRule": {
+   //进入哪个页面会进行预下载
+     "pages/contact/contact":{
+   	//预下载的包，可以用packages或者name的值
+      "packages": ["pkgA"],
+   	//可以选择网络模式才能预下载的包all所有网络，WiFi仅WiFi下才预下载
+      "network": "all"
+     }
+    },
+   ```
+
+3. ### 分包预下载的限制
+
+   同一个分包中的页面享有**共同**的**预下载大小限额2M**
+
 # 案例
 
+## 自定义tabBar
+
+**注意点：每个 tab 页下的自定义 tabBar 组件实例是不同的，如需实现 tab 选中态，要在当前页面下，通过 `getTabBar` 接口获取组件实例，并调用 setData 更新选中态。可参考底部的代码示例。**
+
+```js
+onShow: function () {
+  if (typeof this.getTabBar === 'function' &&
+    this.getTabBar()) {
+    this.getTabBar().setData({
+      selected: 1 // 控制哪一项是选中状态
+    })
+  }
+}
+```
+
+参考[官方文档](https://developers.weixin.qq.com/miniprogram/dev/framework/ability/custom-tabbar.html)
+
 # 总结
+
+1. 能够知道如何安装和配置vant-weapp组件库
+   - 参考Vant官方文档
+2. 能够知道如何使用**Mobx**实现全局数据共享
+   - 安装包、**创建Store**、**参考官方文档进行使用**
+3. 能够知道如何对小程序的API进行Promise化
+   - 安装包、**在app.js中进行配置**
+4. 能够知道如何实现自定义tabBar的效果
+   - **Vant组件库+自定义组件+全局数据共享**

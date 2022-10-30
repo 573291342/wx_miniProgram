@@ -1,0 +1,5 @@
+<!--index.wxml-->
+<van-button type="primary">按钮</van-button>
+<van-button type="danger">按钮</van-button>
+
+<van-button round type="info" bindtap="getInfo">promise按钮</van-button>

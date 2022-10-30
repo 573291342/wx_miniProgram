@@ -1,0 +1,56 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/message/message",
+    "pages/contact/contact"
+  ],
+  "preloadRule": {
+    "pages/contact/contact":{
+      "packages": ["pkgA"],
+      "network": "wifi"
+    }
+  },
+  "subPackages": [
+    {
+      "root": "pkgA",
+      "name": "p1",
+      "pages": [
+        "pages/cat/cat",
+        "pages/dog/dog"
+      ]
+    },
+    {
+      "root": "pkgB",
+      "name": "p2",
+      "pages": [
+        "pages/apple/apple"
+      ]
+    }
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "组件",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页"
+    },{
+      "pagePath": "pages/message/message",
+      "text": "消息"
+    },{
+      "pagePath": "pages/contact/contact",
+      "text": "联系我们"
+    }]
+  },
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "my-numbers":"/components/numbers/numbers",
+    "van-tabbar": "@vant/weapp/tabbar/index",
+    "van-tabbar-item": "@vant/weapp/tabbar-item/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}
