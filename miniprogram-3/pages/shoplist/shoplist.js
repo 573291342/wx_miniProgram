@@ -32,7 +32,7 @@ Page({
       title: '数据加载中...',
     })
     wx.request({
-      url: `https://www.escook.cn/categories/${this.data.query.id}/shops`,
+      url: `https://applet-base-api-t.itheima.net/categories/${this.data.query.id}/shops`,
       method: 'get',
       data: {
         _page: this.data.page,
